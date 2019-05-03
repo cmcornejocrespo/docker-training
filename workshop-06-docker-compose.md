@@ -516,3 +516,114 @@ docker-compose up -d --build
 ```sh
 docker-compose down --volumes 
 ```
+
+## Worshop 03 Compose and Django
+
+### Define the project components
+
+*  set up and run a simple Django/PostgreSQL app.
+
+* For this project, you need to create a Dockerfile, a Python dependencies file, and a docker-compose.yml file. (You can use either a .yml or .yaml extension for this file.)
+
+* Create an empty project directory.
+
+* Create a new file called Dockerfile in your project director
+
+* Add the following content to the Dockerfile.
+
+```yaml
+FROM python:3
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
+WORKDIR /code
+COPY requirements.txt /code/
+RUN pip install -r requirements.txt
+COPY . /code/
+```
+
+* Create a requirements.txt in your project directory.
+
+```sh
+Django>=2.0,<3.0
+psycopg2>=2.7,<3.0
+```
+
+* Create a file called docker-compose.yml in your project directory.
+
+```yaml
+version: '3'
+
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+```
+
+### Create a Django project
+
+* Change to the root of your project directory.
+
+```sh
+docker-compose run web django-admin startproject composeexample .
+```
+
+This instructs Compose to run django-admin startproject composeexample in a container, using the web service’s image and configuration. Because the web image doesn’t exist yet, Compose builds it from the current directory, as specified by the build: . line in docker-compose.yml.
+
+Once the web service image is built, Compose runs it and executes the django-admin startproject command in the container. This command instructs Django to create a set of files and directories representing a Django project.
+
+* After the docker-compose command completes, list the contents of your project.
+
+```sh
+$ ls -l
+drwxr-xr-x 2 root   root   composeexample
+-rw-rw-r-- 1 user   user   docker-compose.yml
+-rw-rw-r-- 1 user   user   Dockerfile
+-rwxr-xr-x 1 root   root   manage.py
+-rw-rw-r-- 1 user   user   requirements.txt
+```
+
+### Connect the database
+
+* In your project directory, edit the composeexample/settings.py
+
+* Replace the DATABASES = ... with the following:
+
+```sh
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
+    }
+}
+```
+
+* Run the docker-compose up 
+
+* Open http://localhost:8000
+
+* List running containers.
+
+```sh
+docker ps
+```
+
+* Shut down services
+
+```sh
+docker-compose down
+```
+
+## Worshop 04 - Elastic stack
+
+* Check this [link](https://github.com/cmcornejocrespo/elastic-full-stack-demo)
