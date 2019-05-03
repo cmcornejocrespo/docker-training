@@ -74,4 +74,3 @@ Images are just [templates for docker containers](https://docs.docker.com/engine
 * [`docker rmi`](https://docs.docker.com/engine/reference/commandline/rmi) removes an image.
 * [`docker load`](https://docs.docker.com/engine/reference/commandline/load) loads an image from a tar archive as STDIN, including images and tags (as of 0.7).
 * [`docker save`](https://docs.docker.com/engine/reference/commandline/save) saves an image to a tar archive stream to STDOUT with all parent layers, tags & versions (as of 0.7).
-

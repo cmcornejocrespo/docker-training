@@ -33,7 +33,7 @@ docker network create my-net
 docker network ls
 
 # Connect a container to a user-defined bridge
-docker create --name my-nginx \
+docker run --name my-nginx \
   --network my-net \
   --publish 8080:80 \
   nginx:latest
