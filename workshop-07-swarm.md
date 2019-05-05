@@ -490,3 +490,9 @@ networks:
 ```sh
 docker service scale hp-demo_web=15
 ```
+
+* Delete the stack
+
+```sh
+docker stack rm hp-demo
+```
