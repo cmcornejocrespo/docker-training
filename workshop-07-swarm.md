@@ -175,7 +175,18 @@ docker-machine ssh manager1 "docker node ls"
 * The next step is to create a service and list out the services. This creates a single service called web that runs the latest nginx:
 
 ```sh
-docker-machine ssh manager1 "docker service create -p 80:80 --name web nginx:latest"
+docker-machine ssh manager1 "docker service create \
+-p 80:80 \
+--name web \
+nginx:latest"
+
+docker-machine ssh manager1 "docker service create \
+  --name portainer \
+  --publish 9000:9000 \
+  --constraint node.role==manager \
+  --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+  portainer/portainer"
+
 docker-machine ssh manager1 "docker service ls"
 ```
 
@@ -249,7 +260,7 @@ docker-machine ssh manager2 "docker node ls"
 
 ```sh
 docker-machine ssh manager2 "docker service rm web"
-docker-machine ssh manager2 "docker service ps web" 
+docker-machine ssh manager2 "docker service ps web"
 ```
 
 * Clean up
@@ -264,4 +275,218 @@ docker-machine stop $(docker-machine ls -q)
 docker-machine rm $(docker-machine ls -q)
 ```
 
-* hyper-v [workaround](https://github.com/docker/labs/blob/master/swarm-mode/beginner-tutorial/swarm-node-hyperv-setup.ps1) and [here](https://github.com/docker/labs/blob/master/swarm-mode/beginner-tutorial/swarm-node-hyperv-teardown.ps1)  .ps1
+* hyper-v [workaround](https://github.com/docker/labs/blob/master/swarm-mode/beginner-tutorial/swarm-node-hyperv-setup.ps1) and [here](https://github.com/docker/labs/blob/master/swarm-mode/beginner-tutorial/swarm-node-hyperv-teardown.ps1)  .ps1 [here-hyperv](https://docs.docker.com/get-started/part4/#localwin)
+
+
+## Workshop 02 - Services and Stacks in Swarm
+
+* Create docker-compose.yml (make sure your image is publish in dockerhub)
+
+```yml
+version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    image: cmcornejocrespo/hp-course
+    deploy:
+      replicas: 5
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "4000:80"
+    networks:
+      - webnet
+networks:
+  webnet:
+```
+
+* Run in in service mode
+
+```sh
+docker-compose up -d
+```
+
+* Check is working and stop it
+
+* Run your new load-balanced app. Init the cluster
+
+```sh
+docker swarm init
+```
+
+* Deploy the stack
+
+```sh
+docker stack deploy -c docker-compose.yml hp-demo
+```
+
+* Check 5 replicas are running
+
+```sh
+docker service ls
+```
+
+or
+
+```sh
+docker stack services hp-demo
+```
+
+* A single container running in a service is called a task. Tasks are given unique IDs that numerically increment, up to the number of replicas you defined in docker-compose.yml. List the tasks for your service:
+
+```sh
+docker service ps hp-demo_web
+```
+
+* You can run curl -4 http://localhost:4000 several times in a row, or go to that URL in your browser and hit refresh a few times.
+
+```sh
+curl -4 http://localhost:4000
+```
+
+* To view all tasks of a stack, you can run docker stack ps followed by your app name, as shown in the following example:
+
+```sh
+docker stack ps hp-demo
+```
+
+* Scale the app. You can scale the app by changing the replicas value in docker-compose.yml, saving the change, and re-running the docker stack deploy command
+
+```sh
+docker stack deploy -c docker-compose.yml hp-demo
+```
+
+* Check new status
+
+```sh
+docker stack ps hp-demo
+```
+
+* Take down the app and the swarm
+
+```sh
+docker stack rm hp-demo
+docker swarm leave --force
+```
+
+## Workshop 03 - Docker playground
+
+* Open [play-with-docker](https://labs.play-with-docker.com)
+
+* Add three masters
+
+* Initialize the swarm and add nodes
+
+```sh
+docker swarm init --advertise-addr <IP>
+
+docker swarm join --token TOKEN IP:PORT
+```
+
+* Check the swarm in the leader
+
+```sh
+docker node ls
+```
+
+* Add a new service and redeploy
+
+```yaml
+version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    image: username/repo:tag
+    deploy:
+      replicas: 5
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    ports:
+      - "80:80"
+    networks:
+      - webnet
+  portainer:
+    image: portainer/portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+networks:
+  webnet:
+```
+
+* Deploy stack
+
+```sh
+docker stack deploy -c docker-compose.yml hp-demo
+```
+
+* Check status
+
+```sh
+docker stack services hp-demo
+```
+
+* Persist the data. Update docker-compose.yml
+
+```yaml
+version: "3"
+services:
+  web:
+    # replace username/repo:tag with your name and image details
+    image: username/repo:tag
+    deploy:
+      replicas: 5
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+    ports:
+      - "80:80"
+    networks:
+      - webnet
+  portainer:
+    image: portainer/portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    command: redis-server --appendonly yes
+    networks:
+      - webnet
+networks:
+  webnet:
+```
+
+* Scale the app
+
+```sh
+docker service scale hp-demo_web=15
+```
