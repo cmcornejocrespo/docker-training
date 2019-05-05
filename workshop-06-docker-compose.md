@@ -1,4 +1,4 @@
-# Docker training HP - Workshop 06 -  Dcoker Compose
+# Docker training HP - Workshop 06 -  Docker Compose
 
 ## Install Docker Compose
 
