@@ -1,6 +1,6 @@
 # Docker training HP - Workshop 07 -  Docker Swarm
 
-## Swarm mode CLI commands
+## Swarm mode CLI [commands](https://docs.docker.com/engine/swarm/)
 
 ### docker swarm [init](https://docs.docker.com/engine/reference/commandline/swarm_init/)
 
@@ -496,3 +496,7 @@ docker service scale hp-demo_web=15
 ```sh
 docker stack rm hp-demo
 ```
+
+## Workshop 03 - Services and Stacks in Swarm II
+
+* Check this [link](https://github.com/dockersamples/example-voting-app). Update the stack and add portainer
