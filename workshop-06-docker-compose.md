@@ -627,3 +627,8 @@ docker-compose down
 ## Worshop 04 - Elastic stack
 
 * Check this [link](https://github.com/cmcornejocrespo/elastic-full-stack-demo)
+
+## Worshop 05 - Voting app
+
+
+* Check this [link](https://github.com/dockersamples/example-voting-app)
