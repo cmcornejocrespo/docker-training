@@ -76,7 +76,7 @@ docker service update [OPTIONS] SERVICE
 
 ## Workshop 01 - Operate a docker swarm cluster
 
-* Create a folder named swarm-operation. Add this file create-swar.sh
+* Create a folder named swarm-operation. Add this file create-swarm.sh
 
 ```sh
 #!/bin/bash

@@ -300,7 +300,7 @@ This tells Docker to:
 * Install the Python dependencies.
 * Set the default command for the container to python app.py.
 
-** Step 3: Define services in a Compose file
+### Step 3: Define services in a Compose file
 
 * Create a file called docker-compose.yml in your project directory and paste the following:
 
@@ -367,7 +367,7 @@ $ docker-compose up
 * Create a file called docker-compose.yml
 
 ```yml
-version "3"
+version: "3"
 
 services:
 ```
