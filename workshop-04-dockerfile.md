@@ -1,4 +1,4 @@
-# Docker training HP - Workshop 04 -  Dockerfile
+# Docker training - Workshop 04 -  Dockerfile
 
 ## Dockerfile
 

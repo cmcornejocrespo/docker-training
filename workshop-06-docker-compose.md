@@ -1,4 +1,4 @@
-# Docker training HP - Workshop 06 -  Docker Compose
+# Docker training - Workshop 06 -  Docker Compose
 
 ## Install Docker Compose
 
@@ -401,7 +401,7 @@ FROM jenkins/jenkins:lts
 
 LABEL mantainer="Your name - youremail"
 LABEL version="1.0"
-LABEL description="HP Dockerfile example"
+LABEL description="Dockerfile example"
 
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 

@@ -1,4 +1,4 @@
-# Docker training HP - Workshop 07 -  Docker Swarm
+# Docker training - Workshop 07 -  Docker Swarm
 
 ## Swarm mode CLI [commands](https://docs.docker.com/engine/swarm/)
 
@@ -287,7 +287,7 @@ version: "3"
 services:
   web:
     # replace username/repo:tag with your name and image details
-    image: cmcornejocrespo/hp-course
+    image: cmcornejocrespo/course
     deploy:
       replicas: 5
       resources:
@@ -321,7 +321,7 @@ docker swarm init
 * Deploy the stack
 
 ```sh
-docker stack deploy -c docker-compose.yml hp-demo
+docker stack deploy -c docker-compose.yml demo
 ```
 
 * Check 5 replicas are running
@@ -333,13 +333,13 @@ docker service ls
 or
 
 ```sh
-docker stack services hp-demo
+docker stack services demo
 ```
 
 * A single container running in a service is called a task. Tasks are given unique IDs that numerically increment, up to the number of replicas you defined in docker-compose.yml. List the tasks for your service:
 
 ```sh
-docker service ps hp-demo_web
+docker service ps demo_web
 ```
 
 * You can run curl -4 http://localhost:4000 several times in a row, or go to that URL in your browser and hit refresh a few times.
@@ -351,25 +351,25 @@ curl -4 http://localhost:4000
 * To view all tasks of a stack, you can run docker stack ps followed by your app name, as shown in the following example:
 
 ```sh
-docker stack ps hp-demo
+docker stack ps demo
 ```
 
 * Scale the app. You can scale the app by changing the replicas value in docker-compose.yml, saving the change, and re-running the docker stack deploy command
 
 ```sh
-docker stack deploy -c docker-compose.yml hp-demo
+docker stack deploy -c docker-compose.yml demo
 ```
 
 * Check new status
 
 ```sh
-docker stack ps hp-demo
+docker stack ps demo
 ```
 
 * Take down the app and the swarm
 
 ```sh
-docker stack rm hp-demo
+docker stack rm demo
 docker swarm leave --force
 ```
 
@@ -431,13 +431,13 @@ networks:
 * Deploy stack
 
 ```sh
-docker stack deploy -c docker-compose.yml hp-demo
+docker stack deploy -c docker-compose.yml demo
 ```
 
 * Check status
 
 ```sh
-docker stack services hp-demo
+docker stack services demo
 ```
 
 * Persist the data. Update docker-compose.yml
@@ -488,13 +488,13 @@ networks:
 * Scale the app
 
 ```sh
-docker service scale hp-demo_web=15
+docker service scale demo_web=15
 ```
 
 * Delete the stack
 
 ```sh
-docker stack rm hp-demo
+docker stack rm demo
 ```
 
 ## Workshop 03 - Services and Stacks in Swarm II

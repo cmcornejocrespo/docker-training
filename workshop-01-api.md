@@ -1,4 +1,4 @@
-# Docker training HP - Workshop 01 - Docker API
+# Docker training - Workshop 01 - Docker API
 
 * Prepare your Docker environment. Install [docker](https://docs.docker.com/install/) [requires docker hub account](https://hub.docker.com)
 

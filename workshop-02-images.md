@@ -1,4 +1,4 @@
-# Docker training HP - Workshop 02 - Registry & Repository
+# Docker training - Workshop 02 - Registry & Repository
 
 A repository is a *hosted* collection of tagged images that together create the file system for a container.
 

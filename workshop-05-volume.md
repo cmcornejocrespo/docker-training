@@ -1,4 +1,4 @@
-# Docker training HP - Workshop 05 -  Volumes
+# Docker training - Workshop 05 -  Volumes
 
 ## Volumes
 

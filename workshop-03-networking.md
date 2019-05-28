@@ -1,4 +1,4 @@
-# Docker training HP - Workshop 03 -  Networking
+# Docker training - Workshop 03 -  Networking
 
 ## Network drivers
 
